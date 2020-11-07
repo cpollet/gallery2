@@ -80,10 +80,9 @@ class DatabasePictureRepositoryTest {
                 Collections.singletonList(image)
         );
 
-        Optional<Picture> savedPicture = repository.save(picture);
+        Picture savedPicture = repository.save(picture);
 
         Assertions.assertThat(savedPicture)
-                .get()
                 .isNotEqualTo(picture)
                 .isNotSameAs(picture)
                 .extracting(Picture::getPictureId, InstanceOfAssertFactories.optional(PictureId.class))
@@ -91,7 +90,6 @@ class DatabasePictureRepositoryTest {
                 .isEqualTo(new PictureId(0L));
 
         Assertions.assertThat(savedPicture)
-                .get()
                 .extracting(Picture::getImages, InstanceOfAssertFactories.list(Image.class))
                 .hasSize(1)
                 .element(0)

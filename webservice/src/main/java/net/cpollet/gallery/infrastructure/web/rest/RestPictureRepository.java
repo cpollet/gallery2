@@ -1,12 +1,12 @@
 package net.cpollet.gallery.infrastructure.web.rest;
 
-import net.cpollet.gallery.domain.picture.entities.Picture;
+import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureRequest;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface RestPictureRepository {
-    UUID save(Picture picture);
+    UUID save(CreatePictureRequest picture);
 
-    Optional<Picture> fetch(UUID uuid);
+    Optional<CreatePictureRequest> fetch(UUID uuid);
 }

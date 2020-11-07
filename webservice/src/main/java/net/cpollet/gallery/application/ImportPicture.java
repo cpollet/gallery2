@@ -12,7 +12,6 @@ import net.cpollet.gallery.domain.picture.values.Role;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
 
 public class ImportPicture {
     private final PictureRepository pictureRepository;
@@ -23,17 +22,16 @@ public class ImportPicture {
         this.physicalImageFactory = physicalImageFactory;
     }
 
-    public Optional<Picture> importPicture(PhysicalImage image, Name name, Description description, Dimension thumbnailDimension) {
-        return new Picture(
-                name,
-                description,
-                LocalDateTime.now(),
-                Collections.singletonList(
-                        new Image(Role.MAIN, image.getBytes(), image.getFormat(), image.getDimension())
-                )
-        ).generateThumbnail(thumbnailDimension, physicalImageFactory)
-                .map(pictureRepository::save)
-                .filter(Optional::isPresent)
-                .map(Optional::get);
+    public Picture importPicture(PhysicalImage image, Name name, Description description, Dimension thumbnailDimension) {
+        return pictureRepository.save(
+                new Picture(
+                        name,
+                        description,
+                        LocalDateTime.now(),
+                        Collections.singletonList(
+                                new Image(Role.MAIN, image.getBytes(), image.getFormat(), image.getDimension())
+                        )
+                ).generateThumbnail(thumbnailDimension, physicalImageFactory)
+        );
     }
 }

@@ -1,9 +1,9 @@
 package net.cpollet.gallery.infrastructure.spring;
 
 
-import net.cpollet.gallery.domain.picture.entities.Picture;
 import net.cpollet.gallery.infrastructure.web.rest.PictureController;
 import net.cpollet.gallery.infrastructure.web.rest.RestPictureRepository;
+import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,17 +21,17 @@ public class SpringWebConfiguration {
     @Bean
     RestPictureRepository restPictureRepository() {
         return new RestPictureRepository() {
-            private final Map<UUID, Picture> cache = new HashMap<>();
+            private final Map<UUID, CreatePictureRequest> cache = new HashMap<>();
 
             @Override
-            public UUID save(Picture picture) {
+            public UUID save(CreatePictureRequest picture) {
                 UUID uuid = UUID.randomUUID();
                 cache.put(uuid, picture);
                 return uuid;
             }
 
             @Override
-            public Optional<Picture> fetch(UUID uuid) {
+            public Optional<CreatePictureRequest> fetch(UUID uuid) {
                 return Optional.ofNullable(cache.get(uuid));
             }
         };

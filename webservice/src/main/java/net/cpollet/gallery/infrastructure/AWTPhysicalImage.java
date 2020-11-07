@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Optional;
+import java.io.UncheckedIOException;
 
 
 public class AWTPhysicalImage implements PhysicalImage {
@@ -42,7 +42,7 @@ public class AWTPhysicalImage implements PhysicalImage {
     }
 
     @Override
-    public Optional<PhysicalImage> resize(Dimension dimension) {
+    public PhysicalImage resize(Dimension dimension) {
         Image scaledImage = image.getScaledInstance(dimension.getWidth(), dimension.getHeight(), Image.SCALE_SMOOTH);
         BufferedImage newImage = new BufferedImage(dimension.getWidth(), dimension.getHeight(), image.getType());
 
@@ -53,15 +53,14 @@ public class AWTPhysicalImage implements PhysicalImage {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             ImageIO.write(newImage, format.name(), out);
-            return Optional.of(new AWTPhysicalImage(
+            return new AWTPhysicalImage(
                     dimension,
                     format, newImage,
                     new Bytes(out.toByteArray())
-            ));
+            );
         }
         catch (IOException e) {
-		// TODO fixme
-		return null;
+            throw new UncheckedIOException(e);
         }
     }
 }

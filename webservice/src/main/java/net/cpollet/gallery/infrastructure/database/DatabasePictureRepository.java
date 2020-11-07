@@ -8,6 +8,7 @@ import net.cpollet.gallery.infrastructure.database.entities.DBImage;
 import net.cpollet.gallery.infrastructure.database.entities.DBPicture;
 import net.cpollet.gallery.infrastructure.database.repositories.SpringDataJdbcImageRepository;
 import net.cpollet.gallery.infrastructure.database.repositories.SpringDataJdbcPictureRepository;
+import net.cpollet.gallery.infrastructure.exceptions.InfrastructureException;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class DatabasePictureRepository implements PictureRepository {
     }
 
     @Override
-    public Optional<Picture> save(Picture picture) {
+    public Picture save(Picture picture) {
         try {
             DBPicture dbPicture = pictureRepository.save(DBPicture.from(picture));
 
@@ -35,11 +36,10 @@ public class DatabasePictureRepository implements PictureRepository {
                     .map(image -> imageRepository.save(DBImage.from(image, dbPicture.getId())))
                     .collect(Collectors.toList());
 
-            return Optional.of(dbPicture.toDomain(images));
+            return dbPicture.toDomain(images);
         }
         catch (Throwable t) {
-            log.error("Unable to save picture {}", picture.getPictureId(), t);
-            return Optional.empty();
+            throw new InfrastructureException(t);
         }
     }
 
@@ -51,8 +51,7 @@ public class DatabasePictureRepository implements PictureRepository {
                     .map(picture -> picture.toDomain(imageRepository.findByPictureId(picture.getId())));
         }
         catch (Throwable t) {
-            log.error("Unable to fetch picture {}", pictureId, t);
-            return Optional.empty();
+            throw new InfrastructureException(t);
         }
     }
 }
