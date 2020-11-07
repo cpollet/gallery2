@@ -13,6 +13,7 @@ import net.cpollet.gallery.infrastructure.exceptions.InfrastructureException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 public class DatabasePictureRepository implements PictureRepository {
@@ -53,5 +54,12 @@ public class DatabasePictureRepository implements PictureRepository {
         catch (Throwable t) {
             throw new InfrastructureException(t);
         }
+    }
+
+    @Override
+    public List<Picture> all() {
+        return StreamSupport.stream(pictureRepository.findAll().spliterator(), false)
+                .map(p -> p.toDomain(imageRepository.findByPictureId(p.getId())))
+                .collect(Collectors.toList());
     }
 }

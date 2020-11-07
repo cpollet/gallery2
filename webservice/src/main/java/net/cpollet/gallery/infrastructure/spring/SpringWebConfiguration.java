@@ -24,15 +24,15 @@ public class SpringWebConfiguration {
             private final Map<UUID, CreatePictureRequest> cache = new HashMap<>();
 
             @Override
-            public UUID save(CreatePictureRequest picture) {
+            public UUID push(CreatePictureRequest picture) {
                 UUID uuid = UUID.randomUUID();
                 cache.put(uuid, picture);
                 return uuid;
             }
 
             @Override
-            public Optional<CreatePictureRequest> fetch(UUID uuid) {
-                return Optional.ofNullable(cache.get(uuid));
+            public Optional<CreatePictureRequest> pull(UUID uuid) {
+                return Optional.ofNullable(cache.remove(uuid));
             }
         };
     }

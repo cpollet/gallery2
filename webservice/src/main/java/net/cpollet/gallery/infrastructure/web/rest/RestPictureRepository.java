@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface RestPictureRepository {
-    UUID save(CreatePictureRequest picture);
+    UUID push(CreatePictureRequest picture);
 
-    Optional<CreatePictureRequest> fetch(UUID uuid);
+    Optional<CreatePictureRequest> pull(UUID uuid);
 }
