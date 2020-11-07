@@ -7,6 +7,7 @@ import net.cpollet.gallery.domain.picture.entities.Image;
 import net.cpollet.gallery.domain.picture.entities.Picture;
 import net.cpollet.gallery.domain.picture.errors.DomainError;
 import net.cpollet.gallery.domain.picture.values.Bytes;
+import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Name;
 import net.cpollet.gallery.domain.picture.values.Role;
 import net.cpollet.gallery.infrastructure.PhysicalImageFactory;
@@ -39,6 +40,7 @@ public class PictureCreationUseCase {
                                 )
                         )
                 ))
+                .map(p -> p.generateThumbnail(new Dimension(200, 150), physicalImageFactory))
                 .map(pictureRepository::save);
     }
 }

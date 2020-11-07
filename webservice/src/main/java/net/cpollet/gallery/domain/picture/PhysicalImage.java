@@ -11,5 +11,5 @@ public interface PhysicalImage {
 
     Bytes getBytes();
 
-    PhysicalImage resize(Dimension dimension);
+    PhysicalImage resize(Dimension newDimension);
 }

@@ -42,20 +42,41 @@ public class AWTPhysicalImage implements PhysicalImage {
     }
 
     @Override
-    public PhysicalImage resize(Dimension dimension) {
-        Image scaledImage = image.getScaledInstance(dimension.getWidth(), dimension.getHeight(), Image.SCALE_SMOOTH);
-        BufferedImage newImage = new BufferedImage(dimension.getWidth(), dimension.getHeight(), image.getType());
+    public PhysicalImage resize(Dimension newDimension) {
+        double xFactor = (double) newDimension.getWidth() / this.dimension.getWidth();
+        double yFactor = (double) newDimension.getHeight() / this.dimension.getHeight();
+        double scaleFactor = Math.min(xFactor, yFactor);
+
+        Dimension innerDimension = new Dimension(
+                ((int) Math.floor(scaleFactor * dimension.getWidth())),
+                ((int) Math.floor(scaleFactor * dimension.getHeight()))
+        );
+
+        Image scaledImage = image.getScaledInstance(
+                innerDimension.getWidth(),
+                innerDimension.getHeight(),
+                Image.SCALE_SMOOTH
+        );
+
+        BufferedImage newImage = new BufferedImage(newDimension.getWidth(), newDimension.getHeight(), image.getType());
 
         Graphics2D g2d = newImage.createGraphics();
-        g2d.drawImage(scaledImage, 0, 0, null);
+        g2d.setBackground(Color.BLACK);
+        g2d.drawImage(
+                scaledImage,
+                Math.floorDiv(newDimension.getWidth() - innerDimension.getWidth(), 2),
+                Math.floorDiv(newDimension.getHeight() - innerDimension.getHeight(), 2),
+                null
+        );
         g2d.dispose();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             ImageIO.write(newImage, format.name(), out);
             return new AWTPhysicalImage(
-                    dimension,
-                    format, newImage,
+                    newDimension,
+                    format,
+                    newImage,
                     new Bytes(out.toByteArray())
             );
         }

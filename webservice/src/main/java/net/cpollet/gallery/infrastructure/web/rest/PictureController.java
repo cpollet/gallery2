@@ -16,6 +16,7 @@ import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureRespons
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(value = "/pictures")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class PictureController {
     private final PictureRepository pictureRepository;
     private final RestPictureRepository restPictureRepository;
@@ -55,6 +57,7 @@ public class PictureController {
 
     @GetMapping
     public ResponseEntity<List<RestPicture>> getAllPictures() {
+        log.info("Retrieving all pictures");
         return ResponseEntity.ok(
                 pictureRepository.all().stream()
                         .map(RestPicture::from)
