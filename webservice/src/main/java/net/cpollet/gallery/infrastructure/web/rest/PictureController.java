@@ -8,9 +8,11 @@ import net.cpollet.gallery.domain.picture.PictureRepository;
 import net.cpollet.gallery.domain.picture.values.Bytes;
 import net.cpollet.gallery.domain.picture.values.Name;
 import net.cpollet.gallery.domain.picture.values.PictureId;
+import net.cpollet.gallery.infrastructure.io.FileDownloader;
 import net.cpollet.gallery.infrastructure.web.rest.data.RestPicture;
 import net.cpollet.gallery.infrastructure.web.rest.data.Step;
 import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureRequest;
+import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +39,18 @@ public class PictureController {
     private final PictureRepository pictureRepository;
     private final RestPictureRepository restPictureRepository;
     private final PictureCreationUseCase pictureCreationUseCase;
+    private final FileDownloader fileDownloader;
 
     @Autowired
     public PictureController(
             PictureRepository pictureRepository,
             RestPictureRepository restPictureRepository,
-            PictureCreationUseCase pictureCreationUseCase
-    ) {
+            PictureCreationUseCase pictureCreationUseCase,
+            FileDownloader fileDownloader) {
         this.pictureRepository = pictureRepository;
         this.restPictureRepository = restPictureRepository;
         this.pictureCreationUseCase = pictureCreationUseCase;
+        this.fileDownloader = fileDownloader;
     }
 
     @GetMapping
@@ -58,18 +62,33 @@ public class PictureController {
         );
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Step> createPicture(@RequestBody CreatePictureRequest createPictureRequest) throws NoSuchMethodException {
+    @PostMapping
+    public ResponseEntity<CreatePictureResponse> createPicture(@RequestBody CreatePictureRequest createPictureRequest) {
+        if (createPictureRequest.getUrl() != null) {
+            byte[] bytes = fileDownloader.getBytesFromUrl(createPictureRequest.getUrl());
+
+            return pictureCreationUseCase.createPicture(
+                    new Name(createPictureRequest.getName()),
+                    new Description(createPictureRequest.getDescription()),
+                    new Bytes(bytes)
+            )
+                    .mapLeft(e -> ResponseEntity.badRequest().<CreatePictureResponse>build())
+                    .map(RestPicture::from)
+                    .map(CreatePictureResponse::new)
+                    .map(ResponseEntity::ok)
+                    .fold(l -> l, r -> r);
+        }
+
         UUID uuid = restPictureRepository.push(createPictureRequest);
 
-        return ResponseEntity.ok(new Step(uuid)
+        return ResponseEntity.ok(new CreatePictureResponse(new Step(uuid)
                 .add(WebMvcLinkBuilder
                         .linkTo(methodOn(PictureController.class).createPicture(null))
                         .withSelfRel())
                 .add(WebMvcLinkBuilder
                         .linkTo(methodOn(PictureController.class).uploadMainImage(uuid, null))
                         .withRel("main-image"))
-        );
+        ));
     }
 
     @DeleteMapping("/pending/{uuid}")
@@ -128,4 +147,5 @@ public class PictureController {
                 )
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 }

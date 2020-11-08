@@ -7,6 +7,7 @@ import net.cpollet.gallery.infrastructure.PhysicalImageFactory;
 import net.cpollet.gallery.infrastructure.database.DatabasePictureRepository;
 import net.cpollet.gallery.infrastructure.database.repositories.SpringDataJdbcImageRepository;
 import net.cpollet.gallery.infrastructure.database.repositories.SpringDataJdbcPictureRepository;
+import net.cpollet.gallery.infrastructure.io.FileDownloader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,5 +32,10 @@ public class ApplicationConfiguration {
             PictureRepository pictureRepository
     ) {
         return new PictureCreationUseCase(physicalImageFactory, pictureRepository);
+    }
+
+    @Bean
+    FileDownloader fileDownloader() {
+        return new FileDownloader(5000, 5000);
     }
 }
