@@ -40,12 +40,16 @@ public class RestPicture extends RepresentationModel<RestPicture> {
         );
         restPicture.add(
                 WebMvcLinkBuilder.linkTo(PictureController.class).slash(restPicture.getId()).withSelfRel(),
-                linkTo(restPicture, picture.getMainImage(), "main-bytes")
+                linkTo(restPicture, picture.getMainImage(), "main-data")
         );
-        picture.getThumbnail().ifPresent(thumbnailImage ->
-                restPicture.add(linkTo(restPicture, thumbnailImage, "thumbnail-bytes"))
+        picture.getThumbnails().forEach(thumbnailImage ->
+                restPicture.add(linkTo(restPicture, thumbnailImage, rel(thumbnailImage)))
         );
         return restPicture;
+    }
+
+    private static String rel(Image image) {
+        return String.format("thumbnail-%dx%d-data", image.getDimension().getWidth(), image.getDimension().getHeight());
     }
 
     private static Link linkTo(RestPicture picture, Image image, String rel) {

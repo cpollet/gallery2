@@ -1,6 +1,7 @@
 package net.cpollet.gallery.infrastructure.spring;
 
 import net.cpollet.gallery.application.PictureCreationUseCase;
+import net.cpollet.gallery.application.ThumbnailCreationUseCase;
 import net.cpollet.gallery.domain.picture.PictureRepository;
 import net.cpollet.gallery.infrastructure.AWTPhysicalImageFactory;
 import net.cpollet.gallery.infrastructure.PhysicalImageFactory;
@@ -27,6 +28,11 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    FileDownloader fileDownloader() {
+        return new FileDownloader(5000, 5000);
+    }
+
+    @Bean
     PictureCreationUseCase pictureCreationUseCase(
             PhysicalImageFactory physicalImageFactory,
             PictureRepository pictureRepository
@@ -35,7 +41,10 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    FileDownloader fileDownloader() {
-        return new FileDownloader(5000, 5000);
+    ThumbnailCreationUseCase thumbnailCreationUseCase(
+            PictureRepository pictureRepository,
+            PhysicalImageFactory physicalImageFactory
+    ) {
+        return new ThumbnailCreationUseCase(pictureRepository, physicalImageFactory);
     }
 }

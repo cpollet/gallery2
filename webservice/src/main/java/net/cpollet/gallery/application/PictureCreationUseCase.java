@@ -40,7 +40,7 @@ public class PictureCreationUseCase {
                                 )
                         )
                 ))
-                .map(p -> p.generateThumbnail(new Dimension(200, 150), physicalImageFactory))
+                .map(p -> p.generateThumbnail(new Dimension(400, 400), physicalImageFactory))
                 .map(pictureRepository::save);
     }
 }

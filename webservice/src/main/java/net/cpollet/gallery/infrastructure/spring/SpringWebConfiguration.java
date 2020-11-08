@@ -1,6 +1,7 @@
 package net.cpollet.gallery.infrastructure.spring;
 
 
+import net.cpollet.gallery.infrastructure.web.commands.GenerateThumbnailsCommand;
 import net.cpollet.gallery.infrastructure.web.rest.PictureController;
 import net.cpollet.gallery.infrastructure.web.rest.RestPictureRepository;
 import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureRequest;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = PictureController.class)
+@ComponentScan(basePackageClasses = {GenerateThumbnailsCommand.class, PictureController.class})
 public class SpringWebConfiguration {
     @Bean
     RestPictureRepository restPictureRepository() {

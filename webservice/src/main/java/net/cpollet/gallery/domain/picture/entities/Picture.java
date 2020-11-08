@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Value
 @EqualsAndHashCode(of = "pictureId")
@@ -74,9 +75,9 @@ public class Picture {
                 .orElseThrow();
     }
 
-    public Optional<Image> getThumbnail() {
+    public List<Image> getThumbnails() {
         return images.stream()
                 .filter(i -> i.getRole().equals(Role.THUMBNAIL))
-                .findFirst();
+                .collect(Collectors.toList());
     }
 }

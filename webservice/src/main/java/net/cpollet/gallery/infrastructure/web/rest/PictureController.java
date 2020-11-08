@@ -35,8 +35,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/pictures")
-@Slf4j
 @CrossOrigin(origins = "*")
+@Slf4j
 public class PictureController {
     private final PictureRepository pictureRepository;
     private final RestPictureRepository restPictureRepository;
@@ -152,3 +152,4 @@ public class PictureController {
     }
 
 }
+
