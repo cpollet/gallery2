@@ -2,6 +2,7 @@ package net.cpollet.gallery.infrastructure;
 
 import net.cpollet.gallery.domain.picture.PhysicalImage;
 import net.cpollet.gallery.domain.picture.values.Bytes;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Format;
 
@@ -11,9 +12,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Map;
 
 
 public class AWTPhysicalImage implements PhysicalImage {
+    private static final Map<Color, java.awt.Color> COLOR_MAP = Map.of(
+            Color.BLACK, java.awt.Color.BLACK,
+            Color.WHITE, java.awt.Color.WHITE
+    );
     private final Dimension dimension;
     private final Format format;
     private final BufferedImage image;
@@ -42,7 +48,7 @@ public class AWTPhysicalImage implements PhysicalImage {
     }
 
     @Override
-    public PhysicalImage resize(Dimension newDimension) {
+    public PhysicalImage resize(Dimension newDimension, Color backgroundColor) {
         double xFactor = (double) newDimension.getWidth() / this.dimension.getWidth();
         double yFactor = (double) newDimension.getHeight() / this.dimension.getHeight();
         double scaleFactor = Math.min(xFactor, yFactor);
@@ -61,7 +67,8 @@ public class AWTPhysicalImage implements PhysicalImage {
         BufferedImage newImage = new BufferedImage(newDimension.getWidth(), newDimension.getHeight(), image.getType());
 
         Graphics2D g2d = newImage.createGraphics();
-        g2d.setBackground(Color.BLACK);
+        g2d.setBackground(COLOR_MAP.get(backgroundColor));
+        g2d.clearRect(0, 0, newDimension.getWidth(), newDimension.getHeight());
         g2d.drawImage(
                 scaledImage,
                 Math.floorDiv(newDimension.getWidth() - innerDimension.getWidth(), 2),

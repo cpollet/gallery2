@@ -4,6 +4,7 @@ import net.cpollet.gallery.domain.common.values.Description;
 import net.cpollet.gallery.domain.picture.entities.Image;
 import net.cpollet.gallery.domain.picture.entities.Picture;
 import net.cpollet.gallery.domain.picture.values.Bytes;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Format;
 import net.cpollet.gallery.domain.picture.values.ImageId;
@@ -72,7 +73,7 @@ class DatabasePictureRepositoryTest {
                     return image;
                 });
 
-        Image image = new Image(Role.MAIN, new Bytes(new byte[]{}), Format.JPEG, new Dimension(1, 2));
+        Image image = new Image(Role.MAIN, new Bytes(new byte[]{}), Format.JPEG, new Dimension(1, 2), Color.BLACK);
         Picture picture = new Picture(
                 new Name("name"),
                 new Description("description"),
@@ -109,7 +110,7 @@ class DatabasePictureRepositoryTest {
                 ));
         Mockito.when(imageRepository.findByPictureId(pictureId))
                 .thenReturn(Collections.singleton(
-                        new DBImage(imageId, pictureId, "MAIN", new byte[]{}, "JPEG", 1, 2)
+                        new DBImage(imageId, pictureId, "MAIN", new byte[]{}, "JPEG", 1, 2, Color.BLACK.name())
                 ));
 
         Optional<Picture> picture = repository.fetch(new PictureId(pictureId));

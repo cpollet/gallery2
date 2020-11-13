@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.cpollet.gallery.domain.picture.PhysicalImageFactory;
 import net.cpollet.gallery.domain.picture.PictureRepository;
 import net.cpollet.gallery.domain.picture.entities.Picture;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.PictureId;
 
@@ -23,7 +24,7 @@ public class ThumbnailCreationUseCase {
         log.info("Generating thumbnail for {}; dimension is {}", pictureId, dimension);
         return pictureRepository
                 .fetch(pictureId)
-                .map(p -> p.generateThumbnail(dimension, physicalImageFactory))
+                .map(p -> p.generateThumbnail(dimension, Color.WHITE, physicalImageFactory))
                 .map(pictureRepository::save);
     }
 }

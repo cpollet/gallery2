@@ -49,7 +49,11 @@ public class RestPicture extends RepresentationModel<RestPicture> {
     }
 
     private static String rel(Image image) {
-        return String.format("thumbnail-%dx%d-data", image.getDimension().getWidth(), image.getDimension().getHeight());
+        return String.format("thumbnail-%dx%d-%s-data",
+                image.getDimension().getWidth(),
+                image.getDimension().getHeight(),
+                image.getBackgroundColor().name().toLowerCase()
+        );
     }
 
     private static Link linkTo(RestPicture picture, Image image, String rel) {

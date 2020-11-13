@@ -1,6 +1,7 @@
 package net.cpollet.gallery.domain.picture;
 
 import net.cpollet.gallery.domain.picture.values.Bytes;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Format;
 
@@ -11,5 +12,5 @@ public interface PhysicalImage {
 
     Bytes getBytes();
 
-    PhysicalImage resize(Dimension newDimension);
+    PhysicalImage resize(Dimension newDimension, Color backgroundColor);
 }

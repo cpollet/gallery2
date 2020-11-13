@@ -5,6 +5,7 @@ import net.cpollet.gallery.domain.picture.PhysicalImage;
 import net.cpollet.gallery.domain.picture.entities.Image;
 import net.cpollet.gallery.domain.picture.errors.DomainError;
 import net.cpollet.gallery.domain.picture.values.Bytes;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Format;
 import net.cpollet.gallery.domain.picture.values.Role;
@@ -83,7 +84,8 @@ class AWTPhysicalImageFactoryTest {
                         ).readAllBytes()
                 ),
                 Format.JPEG,
-                new Dimension(1, 2)
+                new Dimension(1, 2),
+                Color.BLACK
         ));
 
         VavrAssertions.assertThat(image).isRight();

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import net.cpollet.gallery.domain.picture.entities.Image;
 import net.cpollet.gallery.domain.picture.values.Bytes;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Format;
 import net.cpollet.gallery.domain.picture.values.ImageId;
@@ -23,6 +24,7 @@ public class DBImage {
     private String format;
     private int width;
     private int height;
+    private String backgroundColor;
 
     public static DBImage from(Image image, long pictureId) {
         return new DBImage(
@@ -32,7 +34,8 @@ public class DBImage {
                 image.getData().getBytes(),
                 image.getFormat().name(),
                 image.getDimension().getWidth(),
-                image.getDimension().getHeight()
+                image.getDimension().getHeight(),
+                image.getBackgroundColor().name()
         );
     }
 
@@ -42,7 +45,8 @@ public class DBImage {
                 Role.valueOf(role),
                 new Bytes(data),
                 Format.valueOf(format),
-                new Dimension(width, height)
+                new Dimension(width, height),
+                Color.valueOf(backgroundColor)
         );
     }
 }

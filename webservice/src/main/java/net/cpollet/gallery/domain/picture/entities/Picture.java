@@ -6,6 +6,7 @@ import lombok.Value;
 import net.cpollet.gallery.domain.common.values.Description;
 import net.cpollet.gallery.domain.picture.PhysicalImageFactory;
 import net.cpollet.gallery.domain.picture.exceptions.DomainException;
+import net.cpollet.gallery.domain.picture.values.Color;
 import net.cpollet.gallery.domain.picture.values.Dimension;
 import net.cpollet.gallery.domain.picture.values.Name;
 import net.cpollet.gallery.domain.picture.values.PictureId;
@@ -54,10 +55,10 @@ public class Picture {
         );
     }
 
-    public Picture generateThumbnail(Dimension dimension, PhysicalImageFactory physicalImageFactory) {
+    public Picture generateThumbnail(Dimension dimension, Color backgroundColor, PhysicalImageFactory physicalImageFactory) {
         return Tuple.of(physicalImageFactory.create(getMainImage()).getOrElseThrow(DomainException::new))
-                .map(i -> i.resize(dimension))
-                .map(i -> new Image(Role.THUMBNAIL, i.getBytes(), i.getFormat(), i.getDimension()))
+                .map(i -> i.resize(dimension, backgroundColor))
+                .map(i -> new Image(Role.THUMBNAIL, i.getBytes(), i.getFormat(), i.getDimension(), backgroundColor))
                 .map(this::addImage)
                 ._1();
     }
