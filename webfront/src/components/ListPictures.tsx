@@ -3,6 +3,7 @@ import {Picture as ApiPicture} from "../API";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Description from "./Description";
+import {Mention, MentionsInput} from 'react-mentions';
 import Form from "react-bootstrap/Form";
 
 interface PropsType {
@@ -19,6 +20,15 @@ export default function ListPictures({pictures, editMode}: PropsType) {
         return "/noimage.png";
     }
 
+    const [state, setState] = React.useState({value: ""});
+    const textarea = React.createRef();
+
+    function handleChange(event: { target: { value: string } }) {
+        setState({
+            value: event.target.value,
+        });
+    }
+
     return (
         <Row>
             <Col>
@@ -29,16 +39,30 @@ export default function ListPictures({pictures, editMode}: PropsType) {
                         </Col>
                         <Col>
                             <h5>{p.name}</h5>
-                            <p>
+                            <div>
                                 {editMode ?
-                                    <Form.Control as="textarea" rows={3}>
-                                        {p.description}
-                                    </Form.Control> :
+                                    <div>
+                                        <Form.Control as="textarea" rows={3}/>
+                                        <MentionsInput
+                                            value={state.value}
+                                            onChange={handleChange}
+                                            inputRef={textarea as React.Ref<HTMLTextAreaElement>}
+                                        >
+                                            <Mention
+                                                trigger="#"
+                                                data={[
+                                                    {id: 'Lenna', display: '#Lenna'},
+                                                    {id: 'Lena', display: '#Lena'},
+                                                    {id: '1973', display: '#1973'},
+                                                ]}
+                                            />
+                                        </MentionsInput>
+                                    </div> :
                                     <Description tagRegions={p.tags}>
                                         {p.description}
                                     </Description>
                                 }
-                            </p>
+                            </div>
                         </Col>
                     </Row>
                 ))}
