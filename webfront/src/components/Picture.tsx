@@ -1,21 +1,16 @@
 import React from "react";
 import {Picture as ApiPicture} from "../API";
+import Card from "react-bootstrap/Card";
+import './Picture.css';
+import Description from "./Description";
 
-type propsType = {
+interface propsType {
     picture: ApiPicture
-};
+}
 
 export default function Picture({picture}: propsType) {
     function thumbnail(picture: ApiPicture): string {
-        const pic = picture.links.find(link => link.rel === "thumbnail-500x500-data");
-        if (typeof pic != 'undefined') {
-            return pic.href;
-        }
-        return "/noimage.png";
-    }
-
-    function main(picture: ApiPicture): string {
-        const pic = picture.links.find(link => link.rel === "main-data");
+        const pic = picture.links.find(link => link.rel === "thumbnail-450x450-white-data");
         if (typeof pic != 'undefined') {
             return pic.href;
         }
@@ -23,18 +18,17 @@ export default function Picture({picture}: propsType) {
     }
 
     return (
-        <div style={{float:"left"}}>
-            <div>
-            <a href={main(picture)}>
-                <img
-                    src={thumbnail(picture)}
-                    alt={picture.name}/>
-            </a>
-            </div>
-            <div>
-                <strong>{picture.name}</strong>
-                <p>{picture.description}</p>
-            </div>
-        </div>
+        <Card className="mb-4">
+            <Card.Img variant="top" src={thumbnail(picture)}/>
+            <Card.Body>
+                <Card.Title>{picture.name}</Card.Title>
+                <Card.Text className="light-text">
+                    <Description tagRegions={picture.tags}>
+                        {picture.description}
+                    </Description>
+                </Card.Text>
+                <Card.Link href="#">edit</Card.Link>
+            </Card.Body>
+        </Card>
     );
 }

@@ -1,11 +1,14 @@
 import React from "react";
 import axios, {AxiosResponse} from "axios";
-import Pictures from "./Pictures";
 import Loading from "./Loading";
 import {picturesUrl, Picture as ApiPicture } from "../API";
 
-export default function PicturesContext() {
-    const [pictures, setPictures] = React.useState<ApiPicture[] | undefined>(undefined);
+interface PropType {
+    renderer: (pictures: ApiPicture[]) => JSX.Element
+}
+
+export default function PicturesProvider({renderer}: PropType) {
+    const [pictures, setPictures] = React.useState<ApiPicture[]>([]);
     const [loaded, setLoaded] = React.useState(false);
 
     React.useEffect(fetchPicturesList, []);
@@ -23,9 +26,7 @@ export default function PicturesContext() {
     return (
         <>
             {
-                loaded && typeof pictures !== "undefined" ?
-                <Pictures pictures={pictures}/> :
-                <Loading/>
+                loaded ? renderer(pictures) : <Loading/>
             }
         </>
     );
