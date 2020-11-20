@@ -1,4 +1,4 @@
-package net.cpollet.gallery.infrastructure.web.rest;
+package net.cpollet.gallery.infrastructure.web;
 
 import net.cpollet.gallery.domain.picture.entities.Image;
 import net.cpollet.gallery.domain.picture.values.ImageId;

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/commands/generateThumbnail")
+@RequestMapping(value = "/pictures/commands/generateThumbnail")
 @CrossOrigin(origins = "*")
 public class GenerateThumbnailsCommand {
     private final ThumbnailCreationUseCase thumbnailCreationUseCase;

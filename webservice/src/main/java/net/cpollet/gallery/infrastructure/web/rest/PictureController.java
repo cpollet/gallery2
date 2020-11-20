@@ -9,6 +9,8 @@ import net.cpollet.gallery.domain.picture.values.Bytes;
 import net.cpollet.gallery.domain.picture.values.Name;
 import net.cpollet.gallery.domain.picture.values.PictureId;
 import net.cpollet.gallery.infrastructure.io.FileDownloader;
+import net.cpollet.gallery.infrastructure.web.Encoding;
+import net.cpollet.gallery.infrastructure.web.ImageIdMatcher;
 import net.cpollet.gallery.infrastructure.web.rest.data.RestPicture;
 import net.cpollet.gallery.infrastructure.web.rest.data.Step;
 import net.cpollet.gallery.infrastructure.web.rest.requests.CreatePictureRequest;

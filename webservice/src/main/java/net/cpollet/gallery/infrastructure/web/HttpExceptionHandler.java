@@ -1,4 +1,4 @@
-package net.cpollet.gallery.infrastructure.web.rest;
+package net.cpollet.gallery.infrastructure.web;
 
 import lombok.extern.slf4j.Slf4j;
 import net.cpollet.gallery.domain.picture.errors.DomainError;
@@ -21,7 +21,7 @@ import static io.vavr.Predicates.instanceOf;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @Slf4j
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class HttpExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DomainException.class)
     protected ResponseEntity<Object> handleDomainException(DomainException e) {
         log.error("Caught exception from domain error [{}] with message [{}]",
