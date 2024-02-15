@@ -16,6 +16,11 @@ export type Picture = {
     links: Link[]
 };
 
+export type AvailableTag = {
+    tag: string,
+    count: number
+}
+
 export function picturesUrl() {
     return process.env.REACT_APP_GALLERY_API_ROOT + '/pictures/';
 }

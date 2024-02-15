@@ -26,7 +26,7 @@ export default function Gallery() {
         }, {
             name: "list",
             next: "grid",
-            renderFn: ((pictures: ApiPicture[]) => <ListPictures pictures={pictures} editMode={editMode}/>),
+            renderFn: ((pictures: ApiPicture[]) => <ListPictures pictures={pictures} inEditMode={editMode}/>),
             markup:
                 <>
                     {editMode ?

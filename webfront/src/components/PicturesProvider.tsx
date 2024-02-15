@@ -3,11 +3,15 @@ import axios, {AxiosResponse} from "axios";
 import Loading from "./Loading";
 import {picturesUrl, Picture as ApiPicture } from "../API";
 
-interface PropType {
+interface PropsType {
     renderer: (pictures: ApiPicture[]) => JSX.Element
 }
 
-export default function PicturesProvider({renderer}: PropType) {
+export function save(p: ApiPicture) {
+    console.log("Saving ", p);
+}
+
+export default function PicturesProvider({renderer}: PropsType) {
     const [pictures, setPictures] = React.useState<ApiPicture[]>([]);
     const [loaded, setLoaded] = React.useState(false);
 
